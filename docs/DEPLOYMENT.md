@@ -47,7 +47,7 @@ echo "RUNWARE_API_KEY=your_api_key_here" > python-service/.env
 ### Service Ports
 - **Frontend**: http://localhost:5174
 - **Backend**: http://localhost:3000
-- **Python Service**: http://localhost:5000
+- **Python Service**: http://localhost:5005
 
 ## Production Deployment Options
 
@@ -83,7 +83,7 @@ WORKDIR /app
 COPY python-service/requirements.txt .
 RUN pip install -r requirements.txt
 COPY python-service/ .
-EXPOSE 5000
+EXPOSE 5005
 CMD ["python", "app.py"]
 ```
 
@@ -108,7 +108,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - PYTHON_SERVICE_URL=http://python-service:5000
+      - PYTHON_SERVICE_URL=http://python-service:5005
     depends_on:
       - python-service
 
@@ -117,7 +117,7 @@ services:
       context: .
       dockerfile: Dockerfile.python
     ports:
-      - "5000:5000"
+      - "5005:5005"
     environment:
       - RUNWARE_API_KEY=${RUNWARE_API_KEY}
 ```
@@ -217,7 +217,7 @@ FLASK_ENV=development
 FLASK_DEBUG=1
 
 # backend/.env
-PYTHON_SERVICE_URL=http://localhost:5000
+PYTHON_SERVICE_URL=http://localhost:5005
 FRONTEND_URL=http://localhost:5174
 NODE_ENV=development
 
@@ -251,7 +251,7 @@ VITE_API_URL=https://your-backend.com
 ### Monitoring Setup
 ```bash
 # Simple uptime monitoring
-curl -f http://localhost:5000/health || exit 1
+curl -f http://localhost:5005/health || exit 1
 curl -f http://localhost:3000/api/health || exit 1
 ```
 

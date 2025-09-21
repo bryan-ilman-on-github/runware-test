@@ -86,7 +86,7 @@ runware-test/
 
 ### Request Flow
 1. Frontend sends request to Backend (:3000)
-2. Backend forwards to Python Service (:5000)
+2. Backend forwards to Python Service (:5005)
 3. Python Service processes via Runware SDK
 4. Response propagates back through the chain
 

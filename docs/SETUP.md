@@ -36,7 +36,7 @@ cd ../python-service
 pip install -r requirements.txt
 cp .env.example .env
 # Edit .env and add your RUNWARE_API_KEY
-python app.py  # Runs on http://localhost:5000
+python app.py  # Runs on http://localhost:5005
 ```
 
 ### 5. Configure API Key

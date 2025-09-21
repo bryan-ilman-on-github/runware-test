@@ -72,7 +72,7 @@ A comprehensive AI media generation application showcasing Runware's capabilitie
 ### Access Points
 - **Frontend:** http://localhost:5174
 - **Backend API:** http://localhost:3000
-- **Python Service:** http://localhost:5000
+- **Python Service:** http://localhost:5005
 
 ## Usage
 
@@ -137,7 +137,7 @@ RUNWARE_API_KEY=your_runware_api_key
 
 # Optional overrides
 FRONTEND_URL=http://localhost:5174
-PYTHON_SERVICE_URL=http://localhost:5000
+PYTHON_SERVICE_URL=http://localhost:5005
 PORT=3000
 ```
 
@@ -169,7 +169,7 @@ PORT=3000
 cd python-service && python test_connection.py
 
 # Health check all services
-curl http://localhost:5000/health  # Python
+curl http://localhost:5005/health  # Python
 curl http://localhost:3000/api/health  # Backend
 ```
 
@@ -191,7 +191,7 @@ curl http://localhost:3000/api/health  # Backend
 **Service Status:**
 ```bash
 # Check if services are running
-netstat -an | findstr ":5000"  # Python service
+netstat -an | findstr ":5005"  # Python service
 netstat -an | findstr ":3000"  # Backend
 netstat -an | findstr ":5174"  # Frontend
 ```
