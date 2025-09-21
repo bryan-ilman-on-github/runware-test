@@ -268,6 +268,98 @@ app.post('/api/upscale-image', async (req, res) => {
     }
 });
 
+// Image caption endpoint
+app.post('/api/caption-image', async (req, res) => {
+    try {
+        const { image } = req.body;
+
+        if (!image) {
+            return res.status(400).json({
+                success: false,
+                error: 'Image data is required'
+            });
+        }
+
+        console.log('📝 Processing image captioning...');
+
+        // Forward request to Python service
+        const response = await axios.post(`${PYTHON_SERVICE_URL}/caption-image`, {
+            image
+        }, {
+            timeout: 30000 // 30 second timeout
+        });
+
+        console.log(`✅ Caption generated in ${response.data.metadata?.processingTime}s`);
+
+        res.json(response.data);
+
+    } catch (error) {
+        console.error('❌ Image captioning error:', error.message);
+
+        if (error.code === 'ECONNREFUSED') {
+            return res.status(503).json({
+                success: false,
+                error: 'Python service unavailable. Please ensure the Python service is running.'
+            });
+        }
+
+        if (error.response) {
+            return res.status(error.response.status).json(error.response.data);
+        }
+
+        res.status(500).json({
+            success: false,
+            error: 'Internal server error'
+        });
+    }
+});
+
+// Image to text endpoint
+app.post('/api/image-to-text', async (req, res) => {
+    try {
+        const { image } = req.body;
+
+        if (!image) {
+            return res.status(400).json({
+                success: false,
+                error: 'Image data is required'
+            });
+        }
+
+        console.log('🔍 Processing text extraction...');
+
+        // Forward request to Python service
+        const response = await axios.post(`${PYTHON_SERVICE_URL}/image-to-text`, {
+            image
+        }, {
+            timeout: 30000 // 30 second timeout
+        });
+
+        console.log(`✅ Text extracted in ${response.data.metadata?.processingTime}s`);
+
+        res.json(response.data);
+
+    } catch (error) {
+        console.error('❌ Text extraction error:', error.message);
+
+        if (error.code === 'ECONNREFUSED') {
+            return res.status(503).json({
+                success: false,
+                error: 'Python service unavailable. Please ensure the Python service is running.'
+            });
+        }
+
+        if (error.response) {
+            return res.status(error.response.status).json(error.response.data);
+        }
+
+        res.status(500).json({
+            success: false,
+            error: 'Internal server error'
+        });
+    }
+});
+
 // Error handling middleware
 app.use((error, req, res, next) => {
     console.error('Unhandled error:', error);
@@ -299,4 +391,6 @@ app.listen(PORT, () => {
     console.log('   POST /api/generate/video');
     console.log('   POST /api/remove-background');
     console.log('   POST /api/upscale-image');
+    console.log('   POST /api/caption-image');
+    console.log('   POST /api/image-to-text');
 });

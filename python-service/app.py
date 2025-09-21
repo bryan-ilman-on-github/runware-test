@@ -18,12 +18,21 @@ from runware import Runware, IImageInference, IImageBackgroundRemoval, IImageUps
 
 # Try to import video inference if available
 try:
-    from runware import IVideoInference
+    from runware import IVideoInference, IFrameImage, IGoogleProviderSettings
     VIDEO_INFERENCE_AVAILABLE = True
     logger.info("✅ IVideoInference available in current SDK version")
 except ImportError:
     VIDEO_INFERENCE_AVAILABLE = False
     logger.info("⚠️  IVideoInference not available in current SDK version")
+
+# Try to import image caption and text features
+try:
+    from runware import IImageCaption, IImageToText
+    IMAGE_FEATURES_AVAILABLE = True
+    logger.info("✅ IImageCaption and IImageToText available")
+except ImportError:
+    IMAGE_FEATURES_AVAILABLE = False
+    logger.info("⚠️  Image text features not available")
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -399,6 +408,64 @@ def upscale_image():
         logger.error(f"Error upscaling image: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
+@app.route('/caption-image', methods=['POST'])
+def caption_image():
+    """Generate caption for image using Runware API"""
+    try:
+        if not IMAGE_FEATURES_AVAILABLE:
+            return jsonify({
+                'success': False,
+                'error': 'Image caption feature not available in current SDK version'
+            }), 400
+
+        # Get request data
+        data = request.get_json()
+
+        if not data:
+            return jsonify({'error': 'No data provided'}), 400
+
+        # Extract image data
+        image_data = data.get('image', '')
+        if not image_data:
+            return jsonify({'error': 'Image data is required'}), 400
+
+        # Run async caption generation
+        result = asyncio.run(caption_image_async(image_data))
+        return jsonify(result)
+
+    except Exception as e:
+        logger.error(f"Error generating caption: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/image-to-text', methods=['POST'])
+def image_to_text():
+    """Extract text from image using Runware API"""
+    try:
+        if not IMAGE_FEATURES_AVAILABLE:
+            return jsonify({
+                'success': False,
+                'error': 'Image to text feature not available in current SDK version'
+            }), 400
+
+        # Get request data
+        data = request.get_json()
+
+        if not data:
+            return jsonify({'error': 'No data provided'}), 400
+
+        # Extract image data
+        image_data = data.get('image', '')
+        if not image_data:
+            return jsonify({'error': 'Image data is required'}), 400
+
+        # Run async text extraction
+        result = asyncio.run(image_to_text_async(image_data))
+        return jsonify(result)
+
+    except Exception as e:
+        logger.error(f"Error extracting text: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
 async def upscale_image_async(image_data, scale_factor):
     """Async function to upscale image"""
     try:
@@ -522,6 +589,98 @@ async def test_runware_connection():
         }
 
     except Exception as e:
+        return {
+            'success': False,
+            'error': str(e)
+        }
+
+async def caption_image_async(image_data):
+    """Async function to generate image caption"""
+    try:
+        start_time = time.time()
+
+        # Ensure client is connected
+        if not runware_client:
+            await initialize_runware()
+
+        # Create caption request
+        request_obj = IImageCaption(
+            inputImage=image_data
+        )
+
+        # Generate caption
+        logger.info("📝 Starting image captioning...")
+        results = await runware_client.imageCaption(requestImageToText=request_obj)
+
+        processing_time = time.time() - start_time
+
+        if results:
+            logger.info(f"✅ Caption generated successfully in {processing_time:.2f}s")
+
+            return {
+                'success': True,
+                'caption': results.text,
+                'processingTime': round(processing_time, 2),
+                'metadata': {
+                    'timestamp': time.time(),
+                    'processingTime': round(processing_time, 2)
+                }
+            }
+        else:
+            return {
+                'success': False,
+                'error': 'Caption generation failed'
+            }
+
+    except Exception as e:
+        processing_time = time.time() - start_time
+        logger.error(f"❌ Caption generation error: {str(e)}")
+        return {
+            'success': False,
+            'error': str(e)
+        }
+
+async def image_to_text_async(image_data):
+    """Async function to extract text from image"""
+    try:
+        start_time = time.time()
+
+        # Ensure client is connected
+        if not runware_client:
+            await initialize_runware()
+
+        # Create text extraction request
+        request_obj = IImageCaption(
+            inputImage=image_data
+        )
+
+        # Extract text
+        logger.info("🔍 Starting text extraction...")
+        results = await runware_client._requestImageToText(requestImageToText=request_obj)
+
+        processing_time = time.time() - start_time
+
+        if results:
+            logger.info(f"✅ Text extracted successfully in {processing_time:.2f}s")
+
+            return {
+                'success': True,
+                'text': results.text,
+                'processingTime': round(processing_time, 2),
+                'metadata': {
+                    'timestamp': time.time(),
+                    'processingTime': round(processing_time, 2)
+                }
+            }
+        else:
+            return {
+                'success': False,
+                'error': 'Text extraction failed'
+            }
+
+    except Exception as e:
+        processing_time = time.time() - start_time
+        logger.error(f"❌ Text extraction error: {str(e)}")
         return {
             'success': False,
             'error': str(e)

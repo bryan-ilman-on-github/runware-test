@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Upload, Download, Loader, Scissors, ZoomIn, ImageIcon } from 'lucide-react'
+import { Upload, Download, Loader, Scissors, ZoomIn, ImageIcon, MessageCircle, FileText } from 'lucide-react'
 
 const ImageTools = () => {
   const [selectedImage, setSelectedImage] = useState(null)
@@ -9,12 +9,16 @@ const ImageTools = () => {
   const [processingType, setProcessingType] = useState('')
   const [error, setError] = useState(null)
   const [scaleFactor, setScaleFactor] = useState(2)
+  const [imageCaption, setImageCaption] = useState(null)
+  const [extractedText, setExtractedText] = useState(null)
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0]
     if (file && file.type.startsWith('image/')) {
       setSelectedImage(file)
       setProcessedImage(null)
+      setImageCaption(null)
+      setExtractedText(null)
       setError(null)
 
       // Create preview
@@ -103,6 +107,82 @@ const ImageTools = () => {
         setProcessedImage(data.image)
       } else {
         setError(data.error || 'Failed to upscale image')
+      }
+    } catch (error) {
+      setError('Network error: ' + error.message)
+    } finally {
+      setIsProcessing(false)
+      setProcessingType('')
+    }
+  }
+
+  const captionImage = async () => {
+    if (!selectedImage) {
+      setError('Please select an image first')
+      return
+    }
+
+    setIsProcessing(true)
+    setProcessingType('image captioning')
+    setError(null)
+
+    try {
+      const base64Image = await convertToBase64(selectedImage)
+
+      const response = await fetch('http://localhost:3001/api/caption-image', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          image: base64Image
+        }),
+      })
+
+      const data = await response.json()
+
+      if (data.success) {
+        setImageCaption(data)
+      } else {
+        setError(data.error || 'Failed to generate caption')
+      }
+    } catch (error) {
+      setError('Network error: ' + error.message)
+    } finally {
+      setIsProcessing(false)
+      setProcessingType('')
+    }
+  }
+
+  const extractText = async () => {
+    if (!selectedImage) {
+      setError('Please select an image first')
+      return
+    }
+
+    setIsProcessing(true)
+    setProcessingType('text extraction')
+    setError(null)
+
+    try {
+      const base64Image = await convertToBase64(selectedImage)
+
+      const response = await fetch('http://localhost:3001/api/image-to-text', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          image: base64Image
+        }),
+      })
+
+      const data = await response.json()
+
+      if (data.success) {
+        setExtractedText(data)
+      } else {
+        setError(data.error || 'Failed to extract text')
       }
     } catch (error) {
       setError('Network error: ' + error.message)
@@ -249,6 +329,60 @@ const ImageTools = () => {
                   )}
                 </button>
               </div>
+
+              {/* Image Caption */}
+              <button
+                onClick={captionImage}
+                disabled={!selectedImage || isProcessing}
+                className={`
+                  w-full flex items-center justify-center space-x-2 py-3 px-4 rounded-lg
+                  font-medium transition-all duration-200
+                  ${!selectedImage || isProcessing
+                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                    : 'bg-purple-600 hover:bg-purple-700 text-white shadow-lg hover:shadow-xl'
+                  }
+                `}
+              >
+                {isProcessing && processingType === 'image captioning' ? (
+                  <>
+                    <Loader className="w-5 h-5 animate-spin" />
+                    <span>Generating Caption...</span>
+                  </>
+                ) : (
+                  <>
+                    <MessageCircle className="w-5 h-5" />
+                    <span>Generate Caption</span>
+                  </>
+                )}
+              </button>
+
+              {/* Text Extraction - Hidden for now */}
+              {false && (
+                <button
+                  onClick={extractText}
+                  disabled={!selectedImage || isProcessing}
+                  className={`
+                    w-full flex items-center justify-center space-x-2 py-3 px-4 rounded-lg
+                    font-medium transition-all duration-200
+                    ${!selectedImage || isProcessing
+                      ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                      : 'bg-orange-600 hover:bg-orange-700 text-white shadow-lg hover:shadow-xl'
+                    }
+                  `}
+                >
+                  {isProcessing && processingType === 'text extraction' ? (
+                    <>
+                      <Loader className="w-5 h-5 animate-spin" />
+                      <span>Extracting Text...</span>
+                    </>
+                  ) : (
+                    <>
+                      <FileText className="w-5 h-5" />
+                      <span>Extract Text (OCR)</span>
+                    </>
+                  )}
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -312,6 +446,41 @@ const ImageTools = () => {
               )}
             </div>
           </div>
+
+          {/* Text Results */}
+          {(imageCaption) && (
+            <div className="card">
+              <h3 className="text-lg font-semibold mb-4">Text Results</h3>
+
+              <div className="space-y-4">
+                {imageCaption && (
+                  <div className="p-4 bg-purple-50 rounded-lg border border-purple-200">
+                    <div className="flex items-center mb-2">
+                      <MessageCircle className="w-5 h-5 text-purple-600 mr-2" />
+                      <h4 className="font-medium text-purple-800">Generated Caption</h4>
+                    </div>
+                    <p className="text-gray-700 mb-2">{imageCaption.caption}</p>
+                    <p className="text-sm text-purple-600">
+                      Processing time: {imageCaption.processingTime}s
+                    </p>
+                  </div>
+                )}
+
+                {false && extractedText && (
+                  <div className="p-4 bg-orange-50 rounded-lg border border-orange-200">
+                    <div className="flex items-center mb-2">
+                      <FileText className="w-5 h-5 text-orange-600 mr-2" />
+                      <h4 className="font-medium text-orange-800">Extracted Text (OCR)</h4>
+                    </div>
+                    <p className="text-gray-700 mb-2 whitespace-pre-wrap">{extractedText.text}</p>
+                    <p className="text-sm text-orange-600">
+                      Processing time: {extractedText.processingTime}s
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

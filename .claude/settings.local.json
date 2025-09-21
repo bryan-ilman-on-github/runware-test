@@ -11,7 +11,8 @@
       "Bash(npx tailwindcss init:*)",
       "Bash(npm init:*)",
       "Bash(./venv/Scripts/activate)",
-      "Bash(pip install:*)"
+      "Bash(pip install:*)",
+      "Bash(findstr:*)"
     ],
     "deny": [],
     "ask": []
