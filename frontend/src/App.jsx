@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Navbar from './components/Navbar'
 import ImageGenerator from './components/ImageGenerator'
 import VideoGenerator from './components/VideoGenerator'
+import ImageTools from './components/ImageTools'
 import Gallery from './components/Gallery'
 import ConnectionStatus from './components/ConnectionStatus'
 
@@ -42,6 +43,7 @@ function App() {
           <Routes>
             <Route path="/" element={<ImageGenerator />} />
             <Route path="/video" element={<VideoGenerator />} />
+            <Route path="/tools" element={<ImageTools />} />
             <Route path="/gallery" element={<Gallery />} />
           </Routes>
         </main>

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { Camera, Video, Grid } from 'lucide-react'
+import { Camera, Video, Wrench, Grid } from 'lucide-react'
 import runwareLogo from '../assets/runware-logo.png'
 
 const Navbar = () => {
@@ -9,6 +9,7 @@ const Navbar = () => {
   const navItems = [
     { path: '/', label: 'Image Generator', icon: Camera },
     { path: '/video', label: 'Video Generator', icon: Video },
+    { path: '/tools', label: 'Image Tools', icon: Wrench },
     { path: '/gallery', label: 'Gallery', icon: Grid },
   ]
 
