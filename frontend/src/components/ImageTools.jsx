@@ -412,7 +412,7 @@ const ImageTools = () => {
 
                   <div className="mt-4 p-3 bg-green-50 rounded-lg">
                     <div className="text-sm space-y-1">
-                      <p><strong>✅ Processing Complete!</strong></p>
+                      <p><strong>Processing Complete!</strong></p>
                       <p><strong>Processing Time:</strong> {processedImage.processingTime}s</p>
                       {processedImage.scaleFactor && (
                         <p><strong>Scale Factor:</strong> {processedImage.scaleFactor}x</p>
@@ -434,7 +434,7 @@ const ImageTools = () => {
                 </div>
               ) : error ? (
                 <div className="text-center text-red-600">
-                  <p className="mb-2">❌ Error:</p>
+                  <p className="mb-2">Error:</p>
                   <p className="text-sm">{error}</p>
                 </div>
               ) : (

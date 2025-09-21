@@ -235,7 +235,7 @@ const VideoGenerator = () => {
 
                       <div className="bg-green-50 border border-green-200 rounded-lg p-4">
                         <div className="text-sm space-y-2">
-                          <p><strong>✅ Video Generated Successfully!</strong></p>
+                          <p><strong>Video Generated Successfully!</strong></p>
                           <p><strong>Prompt:</strong> "{generatedVideo.prompt}"</p>
                           <p><strong>Model:</strong> {generatedVideo.model}</p>
                           <p><strong>Generation Time:</strong> {generatedVideo.generationTime}s</p>
@@ -279,7 +279,7 @@ const VideoGenerator = () => {
                 </div>
               ) : error ? (
                 <div className="text-center text-red-600">
-                  <p className="mb-2">❌ Error:</p>
+                  <p className="mb-2">Error:</p>
                   <p className="text-sm">{error}</p>
                 </div>
               ) : (

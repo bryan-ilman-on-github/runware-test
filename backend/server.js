@@ -65,7 +65,7 @@ app.post('/api/generate/image', async (req, res) => {
             });
         }
 
-        console.log(`🎨 Generating image: "${prompt}"`);
+        console.log(`Generating image: "${prompt}"`);
 
         // Forward request to Python service
         const response = await axios.post(`${PYTHON_SERVICE_URL}/generate/image`, {
@@ -79,12 +79,12 @@ app.post('/api/generate/image', async (req, res) => {
             timeout: 30000 // 30 second timeout
         });
 
-        console.log(`✅ Image generated successfully in ${response.data.metadata?.processingTime}s`);
+        console.log(`Image generated successfully in ${response.data.metadata?.processingTime}s`);
 
         res.json(response.data);
 
     } catch (error) {
-        console.error('❌ Image generation error:', error.message);
+        console.error('Image generation error:', error.message);
 
         if (error.code === 'ECONNREFUSED') {
             return res.status(503).json({
@@ -116,7 +116,7 @@ app.post('/api/generate/video', async (req, res) => {
             });
         }
 
-        console.log(`🎬 Video generation request: "${prompt}"`);
+        console.log(`Video generation request: "${prompt}"`);
 
         // Forward request to Python service
         const response = await axios.post(`${PYTHON_SERVICE_URL}/generate/video`, {
@@ -126,7 +126,7 @@ app.post('/api/generate/video', async (req, res) => {
         res.json(response.data);
 
     } catch (error) {
-        console.error('❌ Video generation error:', error.message);
+        console.error('Video generation error:', error.message);
 
         if (error.response) {
             return res.status(error.response.status).json(error.response.data);
@@ -145,7 +145,7 @@ app.get('/api/models', async (req, res) => {
         const response = await axios.get(`${PYTHON_SERVICE_URL}/models`);
         res.json(response.data);
     } catch (error) {
-        console.error('❌ Models fetch error:', error.message);
+        console.error('Models fetch error:', error.message);
         res.status(500).json({
             success: false,
             error: 'Failed to fetch models'
@@ -156,18 +156,18 @@ app.get('/api/models', async (req, res) => {
 // Test Runware connection
 app.get('/api/test-connection', async (req, res) => {
     try {
-        console.log('🔄 Testing Runware connection...');
+        console.log('Testing Runware connection...');
         const response = await axios.get(`${PYTHON_SERVICE_URL}/test-connection`);
 
         if (response.data.success) {
-            console.log('✅ Runware connection test successful');
+            console.log('Runware connection test successful');
         } else {
-            console.log('❌ Runware connection test failed');
+            console.log('Runware connection test failed');
         }
 
         res.json(response.data);
     } catch (error) {
-        console.error('❌ Connection test error:', error.message);
+        console.error('Connection test error:', error.message);
         res.status(500).json({
             success: false,
             error: 'Failed to test connection'
@@ -187,7 +187,7 @@ app.post('/api/remove-background', async (req, res) => {
             });
         }
 
-        console.log('🖼️ Processing background removal...');
+        console.log('Processing background removal...');
 
         // Forward request to Python service
         const response = await axios.post(`${PYTHON_SERVICE_URL}/remove-background`, {
@@ -196,12 +196,12 @@ app.post('/api/remove-background', async (req, res) => {
             timeout: 30000 // 30 second timeout
         });
 
-        console.log(`✅ Background removal completed in ${response.data.metadata?.processingTime}s`);
+        console.log(`Background removal completed in ${response.data.metadata?.processingTime}s`);
 
         res.json(response.data);
 
     } catch (error) {
-        console.error('❌ Background removal error:', error.message);
+        console.error('Background removal error:', error.message);
 
         if (error.code === 'ECONNREFUSED') {
             return res.status(503).json({
@@ -233,7 +233,7 @@ app.post('/api/upscale-image', async (req, res) => {
             });
         }
 
-        console.log(`📈 Processing image upscaling with factor ${scaleFactor}...`);
+        console.log(`Processing image upscaling with factor ${scaleFactor}...`);
 
         // Forward request to Python service
         const response = await axios.post(`${PYTHON_SERVICE_URL}/upscale-image`, {
@@ -243,12 +243,12 @@ app.post('/api/upscale-image', async (req, res) => {
             timeout: 30000 // 30 second timeout
         });
 
-        console.log(`✅ Image upscaling completed in ${response.data.metadata?.processingTime}s`);
+        console.log(`Image upscaling completed in ${response.data.metadata?.processingTime}s`);
 
         res.json(response.data);
 
     } catch (error) {
-        console.error('❌ Image upscaling error:', error.message);
+        console.error('Image upscaling error:', error.message);
 
         if (error.code === 'ECONNREFUSED') {
             return res.status(503).json({
@@ -280,7 +280,7 @@ app.post('/api/caption-image', async (req, res) => {
             });
         }
 
-        console.log('📝 Processing image captioning...');
+        console.log('Processing image captioning...');
 
         // Forward request to Python service
         const response = await axios.post(`${PYTHON_SERVICE_URL}/caption-image`, {
@@ -289,12 +289,12 @@ app.post('/api/caption-image', async (req, res) => {
             timeout: 30000 // 30 second timeout
         });
 
-        console.log(`✅ Caption generated in ${response.data.metadata?.processingTime}s`);
+        console.log(`Caption generated in ${response.data.metadata?.processingTime}s`);
 
         res.json(response.data);
 
     } catch (error) {
-        console.error('❌ Image captioning error:', error.message);
+        console.error('Image captioning error:', error.message);
 
         if (error.code === 'ECONNREFUSED') {
             return res.status(503).json({
@@ -326,7 +326,7 @@ app.post('/api/image-to-text', async (req, res) => {
             });
         }
 
-        console.log('🔍 Processing text extraction...');
+        console.log('Processing text extraction...');
 
         // Forward request to Python service
         const response = await axios.post(`${PYTHON_SERVICE_URL}/image-to-text`, {
@@ -335,12 +335,12 @@ app.post('/api/image-to-text', async (req, res) => {
             timeout: 30000 // 30 second timeout
         });
 
-        console.log(`✅ Text extracted in ${response.data.metadata?.processingTime}s`);
+        console.log(`Text extracted in ${response.data.metadata?.processingTime}s`);
 
         res.json(response.data);
 
     } catch (error) {
-        console.error('❌ Text extraction error:', error.message);
+        console.error('Text extraction error:', error.message);
 
         if (error.code === 'ECONNREFUSED') {
             return res.status(503).json({
@@ -379,11 +379,11 @@ app.use((req, res) => {
 
 // Start server
 app.listen(PORT, () => {
-    console.log('🚀 Runware Demo Backend Server Started');
-    console.log(`📡 Server running on http://localhost:${PORT}`);
-    console.log(`🐍 Python service: ${PYTHON_SERVICE_URL}`);
-    console.log(`🌐 Frontend URL: ${process.env.FRONTEND_URL || 'http://localhost:5173'}`);
-    console.log('📋 Available endpoints:');
+    console.log('Runware Demo Backend Server Started');
+    console.log(`Server running on http://localhost:${PORT}`);
+    console.log(`Python service: ${PYTHON_SERVICE_URL}`);
+    console.log(`Frontend URL: ${process.env.FRONTEND_URL || 'http://localhost:5173'}`);
+    console.log('Available endpoints:');
     console.log('   GET  /api/health');
     console.log('   GET  /api/models');
     console.log('   GET  /api/test-connection');

@@ -314,7 +314,7 @@ const ImageGenerator = () => {
                 </div>
               ) : error ? (
                 <div className="text-center text-red-600">
-                  <p className="mb-2">❌ Error:</p>
+                  <p className="mb-2">Error:</p>
                   <p className="text-sm">{error}</p>
                 </div>
               ) : (
