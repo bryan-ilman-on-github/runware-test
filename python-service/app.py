@@ -1,9 +1,9 @@
-import asyncio
-import os
 import logging
+import os
+
+from dotenv import load_dotenv
 from flask import Flask
 from flask_cors import CORS
-from dotenv import load_dotenv
 
 # Load environment variables
 load_dotenv()
@@ -11,23 +11,6 @@ load_dotenv()
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
-# Import feature availability
-try:
-    from runware import IVideoInference, IFrameImage, IGoogleProviderSettings
-    VIDEO_INFERENCE_AVAILABLE = True
-    logger.info("IVideoInference available in current SDK version")
-except ImportError:
-    VIDEO_INFERENCE_AVAILABLE = False
-    logger.info("IVideoInference not available in current SDK version")
-
-try:
-    from runware import IImageCaption, IImageToText
-    IMAGE_FEATURES_AVAILABLE = True
-    logger.info("IImageCaption and IImageToText available")
-except ImportError:
-    IMAGE_FEATURES_AVAILABLE = False
-    logger.info("Image text features not available")
 
 # Import routes
 from routes.health import health_bp

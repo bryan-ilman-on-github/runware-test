@@ -1,5 +1,6 @@
 import asyncio
-from flask import Blueprint, request, jsonify
+
+from flask import Blueprint, jsonify, request
 from services.image_service import ImageService
 
 generation_bp = Blueprint('generation', __name__)

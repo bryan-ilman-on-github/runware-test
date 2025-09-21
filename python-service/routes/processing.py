@@ -1,7 +1,6 @@
 import asyncio
 from flask import Blueprint, request, jsonify
 from services.image_service import ImageService
-from services.runware_client import IMAGE_FEATURES_AVAILABLE
 
 processing_bp = Blueprint('processing', __name__)
 
@@ -51,12 +50,6 @@ def upscale_image():
 def caption_image():
     """Generate caption for image using Runware API"""
     try:
-        if not IMAGE_FEATURES_AVAILABLE:
-            return jsonify({
-                'success': False,
-                'error': 'Image caption feature not available in current SDK version'
-            }), 400
-
         data = request.get_json()
 
         if not data:

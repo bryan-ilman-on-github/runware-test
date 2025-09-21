@@ -1,5 +1,6 @@
-import time
 import logging
+import time
+
 from .runware_client import runware_service
 
 logger = logging.getLogger(__name__)
@@ -53,8 +54,8 @@ class ImageService:
     @staticmethod
     async def generate_video(prompt, model="klingai:5@3", duration=10, width=1920, height=1080, output_format="mp4", output_quality=95):
         """Generate video with timing and error handling"""
+        start_time = time.time()
         try:
-            start_time = time.time()
             logger.info(f"Starting video generation: '{prompt}' with model {model}")
 
             videos = await runware_service.generate_video(prompt, model, duration, width, height)
@@ -130,8 +131,8 @@ class ImageService:
     @staticmethod
     async def remove_background(image_data):
         """Remove background from image"""
+        start_time = time.time()
         try:
-            start_time = time.time()
             logger.info("Starting background removal...")
 
             results = await runware_service.remove_background(image_data)
@@ -170,8 +171,8 @@ class ImageService:
     @staticmethod
     async def upscale_image(image_data, scale_factor=2):
         """Upscale image"""
+        start_time = time.time()
         try:
-            start_time = time.time()
             logger.info(f"Starting image upscaling with factor {scale_factor}...")
 
             results = await runware_service.upscale_image(image_data, scale_factor)
@@ -211,8 +212,8 @@ class ImageService:
     @staticmethod
     async def caption_image(image_data):
         """Generate caption for image"""
+        start_time = time.time()
         try:
-            start_time = time.time()
             logger.info("Starting image captioning...")
 
             result = await runware_service.caption_image(image_data)
@@ -247,8 +248,8 @@ class ImageService:
     @staticmethod
     async def test_connection():
         """Test Runware connection"""
+        start_time = time.time()
         try:
-            start_time = time.time()
             images = await runware_service.test_connection()
             response_time = time.time() - start_time
 

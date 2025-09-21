@@ -7,7 +7,7 @@ import asyncio
 import os
 import sys
 from dotenv import load_dotenv
-from runware import Runware, IImageInference
+from runware import IImageInference, Runware
 
 # Load environment variables
 load_dotenv()
