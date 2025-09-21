@@ -28,10 +28,12 @@ class RunwareClientService:
 
     async def ensure_connected(self):
         """Ensure client is connected, connect if needed"""
-        if not self.connected or not self.client:
-            success = await self.connect()
-            if not success or not self.client:
-                raise RuntimeError("Failed to establish connection to Runware")
+        # Always create a fresh connection to avoid event loop issues
+        self.connected = False
+        self.client = None
+        success = await self.connect()
+        if not success or not self.client:
+            raise RuntimeError("Failed to establish connection to Runware")
 
     async def generate_image(self, prompt, model="runware:101@1", width=1024, height=1024, steps=20, cfg_scale=7):
         """Generate image using Runware API"""
