@@ -7,7 +7,7 @@ import axios from 'axios';
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3000;
 const PYTHON_SERVICE_URL = process.env.PYTHON_SERVICE_URL || 'http://localhost:5000';
 
 // Middleware
@@ -382,7 +382,7 @@ app.listen(PORT, () => {
     console.log('Runware Demo Backend Server Started');
     console.log(`Server running on http://localhost:${PORT}`);
     console.log(`Python service: ${PYTHON_SERVICE_URL}`);
-    console.log(`Frontend URL: ${process.env.FRONTEND_URL || 'http://localhost:5173'}`);
+    console.log(`Frontend URL: ${process.env.FRONTEND_URL || 'http://localhost:5174'}`);
     console.log('Available endpoints:');
     console.log('   GET  /api/health');
     console.log('   GET  /api/models');

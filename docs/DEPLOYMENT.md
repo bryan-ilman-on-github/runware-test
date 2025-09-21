@@ -45,8 +45,8 @@ echo "RUNWARE_API_KEY=your_api_key_here" > python-service/.env
 ```
 
 ### Service Ports
-- **Frontend**: http://localhost:5173
-- **Backend**: http://localhost:3001
+- **Frontend**: http://localhost:5174
+- **Backend**: http://localhost:3000
 - **Python Service**: http://localhost:5000
 
 ## Production Deployment Options
@@ -72,7 +72,7 @@ WORKDIR /app
 COPY backend/package*.json ./
 RUN npm install
 COPY backend/ .
-EXPOSE 3001
+EXPOSE 3000
 CMD ["npm", "start"]
 ```
 
@@ -106,7 +106,7 @@ services:
       context: .
       dockerfile: Dockerfile.backend
     ports:
-      - "3001:3001"
+      - "3000:3000"
     environment:
       - PYTHON_SERVICE_URL=http://python-service:5000
     depends_on:
@@ -218,11 +218,11 @@ FLASK_DEBUG=1
 
 # backend/.env
 PYTHON_SERVICE_URL=http://localhost:5000
-FRONTEND_URL=http://localhost:5173
+FRONTEND_URL=http://localhost:5174
 NODE_ENV=development
 
 # frontend/.env
-VITE_API_URL=http://localhost:3001
+VITE_API_URL=http://localhost:3000
 ```
 
 ### Production
@@ -252,7 +252,7 @@ VITE_API_URL=https://your-backend.com
 ```bash
 # Simple uptime monitoring
 curl -f http://localhost:5000/health || exit 1
-curl -f http://localhost:3001/api/health || exit 1
+curl -f http://localhost:3000/api/health || exit 1
 ```
 
 ### Log Aggregation

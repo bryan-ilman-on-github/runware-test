@@ -26,7 +26,7 @@ const VideoGenerator = () => {
                         quality === '1080p' ? { width: 1920, height: 1080 } :
                         { width: 1280, height: 720 }
 
-      const response = await fetch('http://localhost:3001/api/generate/video', {
+      const response = await fetch('http://localhost:3000/api/generate/video', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

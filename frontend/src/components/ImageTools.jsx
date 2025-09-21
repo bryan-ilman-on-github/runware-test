@@ -52,7 +52,7 @@ const ImageTools = () => {
     try {
       const base64Image = await convertToBase64(selectedImage)
 
-      const response = await fetch('http://localhost:3001/api/remove-background', {
+      const response = await fetch('http://localhost:3000/api/remove-background', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -90,7 +90,7 @@ const ImageTools = () => {
     try {
       const base64Image = await convertToBase64(selectedImage)
 
-      const response = await fetch('http://localhost:3001/api/upscale-image', {
+      const response = await fetch('http://localhost:3000/api/upscale-image', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -129,7 +129,7 @@ const ImageTools = () => {
     try {
       const base64Image = await convertToBase64(selectedImage)
 
-      const response = await fetch('http://localhost:3001/api/caption-image', {
+      const response = await fetch('http://localhost:3000/api/caption-image', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -167,7 +167,7 @@ const ImageTools = () => {
     try {
       const base64Image = await convertToBase64(selectedImage)
 
-      const response = await fetch('http://localhost:3001/api/image-to-text', {
+      const response = await fetch('http://localhost:3000/api/image-to-text', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

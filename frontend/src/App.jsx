@@ -18,7 +18,7 @@ function App() {
 
   const checkConnection = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/health')
+      const response = await fetch('http://localhost:3000/api/health')
       const data = await response.json()
       setIsConnected(data.status === 'healthy')
     } catch (error) {

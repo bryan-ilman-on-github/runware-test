@@ -19,7 +19,7 @@ cd runware-demo-generator
 cd frontend
 npm install
 cp .env.example .env
-npm run dev  # Runs on http://localhost:5173
+npm run dev  # Runs on http://localhost:5174
 ```
 
 ### 3. Backend Setup
@@ -27,7 +27,7 @@ npm run dev  # Runs on http://localhost:5173
 cd ../backend
 npm install
 cp .env.example .env
-npm run dev  # Runs on http://localhost:3001
+npm run dev  # Runs on http://localhost:3000
 ```
 
 ### 4. Python Service Setup
@@ -47,7 +47,7 @@ RUNWARE_API_KEY=your_actual_api_key_here
 
 ## Testing the Setup
 
-1. Visit http://localhost:5173
+1. Visit http://localhost:5174
 2. Try generating an image with a simple prompt like "a cat"
 3. Check all three services are running in their respective terminals
 

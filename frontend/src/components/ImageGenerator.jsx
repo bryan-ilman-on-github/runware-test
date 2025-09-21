@@ -20,7 +20,7 @@ const ImageGenerator = () => {
 
   const fetchModels = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/models')
+      const response = await fetch('http://localhost:3000/api/models')
       const data = await response.json()
       if (data.success) {
         setModels(data.models)
@@ -43,7 +43,7 @@ const ImageGenerator = () => {
     try {
       const startTime = Date.now()
 
-      const response = await fetch('http://localhost:3001/api/generate/image', {
+      const response = await fetch('http://localhost:3000/api/generate/image', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
