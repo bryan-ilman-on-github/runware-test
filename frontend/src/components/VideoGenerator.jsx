@@ -21,10 +21,10 @@ const VideoGenerator = () => {
     setGeneratedVideo(null)
 
     try {
-      // Convert quality to dimensions
-      const dimensions = quality === '4K' ? { width: 3840, height: 2160 } :
-                        quality === '1080p' ? { width: 1920, height: 1080 } :
-                        { width: 1280, height: 720 }
+      // Convert quality to supported dimensions for bytedance model
+      const dimensions = quality === '4K' ? { width: 1440, height: 1440 } :
+                        quality === '1080p' ? { width: 1920, height: 1088 } :
+                        { width: 960, height: 960 }
 
       const response = await fetch('http://localhost:3000/api/generate/video', {
         method: 'POST',
@@ -33,6 +33,7 @@ const VideoGenerator = () => {
         },
         body: JSON.stringify({
           prompt,
+          model: 'bytedance:1@1',
           duration,
           width: dimensions.width,
           height: dimensions.height,
@@ -75,8 +76,9 @@ const VideoGenerator = () => {
               Video Generation Ready
             </h3>
             <p className="text-blue-800 mt-1">
-              Video generation uses Runware's async video inference API. Videos are processed
-              asynchronously and may take longer than image generation depending on duration and quality.
+              Video generation uses Runware's async video inference API. Videos
+              are processed asynchronously and may take longer than image
+              generation depending on duration and quality.
             </p>
           </div>
         </div>
@@ -108,7 +110,7 @@ const VideoGenerator = () => {
                   "A time-lapse of a flower blooming",
                   "Waves crashing on a beach at sunset",
                   "A cat playing with a ball of yarn",
-                  "Rain falling on a city street"
+                  "Rain falling on a city street",
                 ].map((example, index) => (
                   <button
                     key={index}

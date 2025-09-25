@@ -107,7 +107,15 @@ app.post('/api/generate/image', async (req, res) => {
 // Video generation endpoint
 app.post('/api/generate/video', async (req, res) => {
     try {
-        const { prompt } = req.body;
+        const {
+            prompt,
+            model = 'bytedance:1@1',
+            duration = 10,
+            width = 1920,
+            height = 1088,
+            outputFormat = 'mp4',
+            outputQuality = 95
+        } = req.body;
 
         if (!prompt) {
             return res.status(400).json({
@@ -116,17 +124,32 @@ app.post('/api/generate/video', async (req, res) => {
             });
         }
 
-        console.log(`Video generation request: "${prompt}"`);
+        console.log(`Video generation request: "${prompt}" with model ${model}`);
 
         // Forward request to Python service
         const response = await axios.post(`${PYTHON_SERVICE_URL}/generate/video`, {
-            prompt
+            prompt,
+            model,
+            duration,
+            width,
+            height,
+            outputFormat,
+            outputQuality
+        }, {
+            timeout: 60000 // 60 second timeout for video generation
         });
 
         res.json(response.data);
 
     } catch (error) {
         console.error('Video generation error:', error.message);
+
+        if (error.code === 'ECONNREFUSED') {
+            return res.status(503).json({
+                success: false,
+                error: 'Python service unavailable. Please ensure the Python service is running.'
+            });
+        }
 
         if (error.response) {
             return res.status(error.response.status).json(error.response.data);

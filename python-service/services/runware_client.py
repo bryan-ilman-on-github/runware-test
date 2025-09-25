@@ -53,7 +53,7 @@ class RunwareClientService:
         images = await self.client.imageInference(requestImage=request_obj)
         return images
 
-    async def generate_video(self, prompt, model="klingai:5@3", duration=10, width=1920, height=1080):
+    async def generate_video(self, prompt, model="bytedance:1@1", duration=5, width=1024, height=576):
         """Generate video using Runware API"""
         await self.ensure_connected()
 
@@ -64,8 +64,7 @@ class RunwareClientService:
             width=width,
             height=height,
             numberResults=1,
-            includeCost=True,
-            seed=42
+            includeCost=True
         )
 
         assert self.client is not None

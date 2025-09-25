@@ -52,7 +52,7 @@ class ImageService:
             }
 
     @staticmethod
-    async def generate_video(prompt, model="klingai:5@3", duration=10, width=1920, height=1080, output_format="mp4", output_quality=95):
+    async def generate_video(prompt, model="bytedance:1@1", duration=10, width=1920, height=1088, output_format="mp4", output_quality=95):
         """Generate video with timing and error handling"""
         start_time = time.time()
         try:
